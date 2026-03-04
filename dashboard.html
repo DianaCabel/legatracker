@@ -279,6 +279,7 @@ const SPECS = {
   Nichel: { min:0.010, max:0.100, color:'#4da6ff', cls:'ni' },
   Rame:   { min:0.400, max:0.850, color:'#f97316', cls:'cu' },
   Piombo: { min:null,  max:0.100, color:'#4ade80', cls:'pb' },
+  Ginesio: { min:null,  max:0.100, color:'#4ade80', cls:'pb' },
 };
 const COMPS = ['Nichel','Rame','Piombo'];
 
@@ -296,6 +297,12 @@ const DEFAULT_NOTES = {
     ok:'✅ Rame nella norma. Continuare monitoraggio periodico.'
   },
   Piombo: {
+    high:'🚨 Pb oltre soglia! Identificare fonte contaminazione. Azione urgente!',
+    low:'✅ Piombo nella norma.',
+    unstable:'⚡ Pb oscillante: possibile contaminazione episodica. Tracciare lotti.',
+    ok:'✅ Piombo nella norma. Continuare monitoraggio periodico.'
+  }
+    Ginesio: {
     high:'🚨 Pb oltre soglia! Identificare fonte contaminazione. Azione urgente!',
     low:'✅ Piombo nella norma.',
     unstable:'⚡ Pb oscillante: possibile contaminazione episodica. Tracciare lotti.',
