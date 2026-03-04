@@ -6,97 +6,42 @@
 <title>LegatTracker – Accesso</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #0a0f1a;
-  color: #e2e8f0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.login-box {
-  background: #111827;
-  border: 1px solid #1e3a5a;
-  border-radius: 16px;
-  padding: 48px 40px;
-  width: 100%;
-  max-width: 420px;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-}
-.logo { font-size: 36px; margin-bottom: 8px; }
-.logo-text { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
-.logo-text span { color: #60a5fa; }
-.logo-sub { font-size: 13px; color: #4a6080; margin-bottom: 36px; line-height: 1.6; }
-.form-group { text-align: left; margin-bottom: 14px; }
-.form-group label { display: block; font-size: 11px; color: #4a6080; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
-.form-group input {
-  width: 100%;
-  background: #0f172a;
-  border: 1px solid #1e3a5a;
-  color: #e2e8f0;
-  padding: 11px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color .2s;
-}
-.form-group input:focus { border-color: #3b82f6; }
-.btn-login {
-  width: 100%;
-  background: #1d4ed8;
-  color: #fff;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: background .2s;
-}
-.btn-login:hover { background: #2563eb; }
-.error-msg {
-  background: #7f1d1d;
-  color: #fca5a5;
-  border-radius: 7px;
-  padding: 10px 14px;
-  font-size: 13px;
-  margin-top: 14px;
-  display: none;
-}
-.footer { margin-top: 32px; font-size: 11px; color: #2a3a5a; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0f1a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.login-box { background: #111827; border: 1px solid #1e3a5a; border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 420px; text-align: center; }
+.logo { font-size: 36px; margin-bottom: 12px; }
+h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+h1 span { color: #60a5fa; }
+.sub { font-size: 13px; color: #4a6080; margin-bottom: 32px; }
+.form-group { text-align: left; margin-bottom: 16px; }
+label { display: block; font-size: 11px; color: #4a6080; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; font-weight: 600; }
+input { width: 100%; background: #0f172a; border: 1px solid #1e3a5a; color: #e2e8f0; padding: 12px 14px; border-radius: 8px; font-size: 14px; outline: none; transition: border .2s; }
+input:focus { border-color: #3b82f6; }
+.btn { width: 100%; background: #1d4ed8; color: #fff; border: none; padding: 13px; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 700; margin-top: 8px; transition: background .2s; }
+.btn:hover { background: #2563eb; }
+.error { background: #7f1d1d; color: #fca5a5; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 14px; display: none; }
+.loading { color: #60a5fa; font-size: 13px; margin-top: 14px; display: none; }
 </style>
 </head>
 <body>
-
 <div class="login-box">
   <div class="logo">⚗️</div>
-  <div class="logo-text"><span>Lega</span>Tracker</div>
-  <div class="logo-sub">
-    Monitoraggio analisi lega saldante<br>
-    Inserisci le credenziali ricevute
-  </div>
-
+  <h1>Lega<span>Tracker</span></h1>
+  <p class="sub">Accesso al portale analisi lega saldante</p>
   <div class="form-group">
-    <label>Codice cliente</label>
-    <input type="text" id="f-client" placeholder="es. AXEL" autocomplete="off" autocapitalize="characters"
-      onkeydown="if(event.key==='Enter') document.getElementById('f-pass').focus()">
+    <label>Codice Cliente</label>
+    <input type="text" id="f-cliente" placeholder="es. AXEL" autocomplete="off" style="text-transform:uppercase">
   </div>
   <div class="form-group">
     <label>Password</label>
-    <input type="password" id="f-pass" placeholder="Password fornita da Cabelpin"
-      onkeydown="if(event.key==='Enter') doLogin()">
+    <input type="password" id="f-pass" placeholder="••••••••">
   </div>
-  <button class="btn-login" onclick="doLogin()">🔐 Accedi alla dashboard</button>
-  <div class="error-msg" id="error-msg">❌ Codice cliente o password errati.</div>
-
-  <div class="footer">Cabelpin Electronics · Sistema interno analisi lega</div>
+  <button class="btn" onclick="doLogin()">🔐 Accedi alla dashboard</button>
+  <div class="error" id="error-msg"></div>
+  <div class="loading" id="loading-msg">⏳ Caricamento dati in corso...</div>
 </div>
 
 <script>
-// ─── CONFIGURAZIONE ────────────────────────────────────────────────────────
+// ─── CONFIGURAZIONE ───────────────────────────────────────────────────────
 // PASSWORD GLOBALE: cambiala qui quando vuoi
 const GLOBAL_PASSWORD = "cabelpin2026";
 
@@ -107,21 +52,66 @@ const CLIENTI = {
   "CLIENTEB":  "clienti/CLIENTEB.json",
   "CLIENTEC":  "clienti/CLIENTEC.json",
 };
-// ──────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────
 
-function doLogin() {
-  const cliente = document.getElementById('f-client').value.trim().toUpperCase();
-  const pass    = document.getElementById('f-pass').value.trim();
-  const errEl   = document.getElementById('error-msg');
+// Leggi parametro URL se presente (es. ?cliente=AXEL)
+const urlParams = new URLSearchParams(window.location.search);
+const preCliente = urlParams.get('cliente');
+if (preCliente) {
+  document.getElementById('f-cliente').value = preCliente.toUpperCase();
+}
 
-  if (pass !== GLOBAL_PASSWORD || !CLIENTI[cliente]) {
+document.getElementById('f-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('f-cliente').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('f-pass').focus();
+});
+document.getElementById('f-cliente').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+});
+
+async function doLogin() {
+  const codice = document.getElementById('f-cliente').value.trim().toUpperCase();
+  const pass   = document.getElementById('f-pass').value.trim();
+  const errEl  = document.getElementById('error-msg');
+  const loadEl = document.getElementById('loading-msg');
+
+  errEl.style.display = 'none';
+
+  if (!codice || !pass) {
+    errEl.textContent = '⚠️ Inserisci codice cliente e password.';
     errEl.style.display = 'block';
-    document.getElementById('f-pass').value = '';
     return;
   }
-  errEl.style.display = 'none';
-  // Redirect alla dashboard con parametri
-  window.location.href = `dashboard.html?cliente=${encodeURIComponent(cliente)}&file=${encodeURIComponent(CLIENTI[cliente])}&auth=${btoa(GLOBAL_PASSWORD)}`;
+
+  if (pass !== GLOBAL_PASSWORD) {
+    errEl.textContent = '🔴 Password non corretta.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (!CLIENTI[codice]) {
+    errEl.textContent = '🔴 Codice cliente non trovato.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Carica il JSON del cliente direttamente da GitHub
+  loadEl.style.display = 'block';
+  try {
+    const response = await fetch(CLIENTI[codice]);
+    if (!response.ok) throw new Error('File non trovato');
+    const data = await response.json();
+    // Salva i dati in sessionStorage e vai alla dashboard
+    sessionStorage.setItem('lt_data', JSON.stringify(data));
+    sessionStorage.setItem('lt_cliente', codice);
+    window.location.href = 'dashboard_online.html';
+  } catch(err) {
+    loadEl.style.display = 'none';
+    errEl.textContent = '🔴 Errore nel caricamento dei dati. Contatta il laboratorio.';
+    errEl.style.display = 'block';
+  }
 }
 </script>
 </body>
