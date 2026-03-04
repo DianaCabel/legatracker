@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LegatTracker – Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0f1a; color: #e2e8f0; min-height: 100vh; }
+
+nav { background: #111827; border-bottom: 2px solid #1d4ed8; padding: 0 24px; display: flex; align-items: center; gap: 14px; height: 54px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
+.logo { font-size: 17px; font-weight: 800; color: #fff; margin-right: 12px; }
+.logo span { color: #60a5fa; }
+.client-badge { background: #1e3a5a; color: #60a5fa; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.nav-right { margin-left: auto; }
+.btn-logout { background: transparent; border: 1px solid #2a3a5a; color: #94a3b8; padding: 6px 14px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.btn-logout:hover { border-color: #f87171; color: #f87171; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+.page-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.page-sub { font-size: 13px; color: #4a6080; margin-bottom: 20px; }
+
+.poz-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.poz-tab { padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1px solid #2a3a5a; color: #94a3b8; background: #1e2d45; transition: all .2s; }
+.poz-tab.active { background: #1d4ed8; border-color: #3b82f6; color: #fff; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+.kpi { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 16px; position: relative; overflow: hidden; }
+.kpi::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+.kpi.ni::before { background: #4da6ff; } .kpi.cu::before { background: #f97316; } .kpi.pb::before { background: #4ade80; }
+.kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a6080; margin-bottom: 8px; }
+.kpi-val { font-size: 28px; font-weight: 700; margin-bottom: 3px; }
+.kpi-val small { font-size: 14px; color: #4a6080; }
+.kpi-meta { font-size: 11px; color: #4a6080; }
+.kpi-stato { position: absolute; top: 12px; right: 12px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.s-ok { background: #14532d; color: #4ade80; }
+.s-warn { background: #78350f; color: #fbbf24; }
+.s-err { background: #7f1d1d; color: #f87171; }
+.cv-bar { height: 5px; background: #0f172a; border-radius: 3px; margin-top: 6px; overflow: hidden; }
+.cv-fill { height: 100%; border-radius: 3px; }
+
+.panel { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+.panel-hdr { padding: 12px 20px; background: #1e2d45; border-bottom: 1px solid #1e3a5a; }
+.panel-title { font-weight: 700; font-size: 14px; color: #c8daf0; }
+.panel-body { padding: 20px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #1e2d45; color: #64748b; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; text-align: center; }
+td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #1a2a3a; font-family: monospace; color: #94a3b8; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #1e2d45; }
+td.tdl { text-align: left; font-family: 'Segoe UI', sans-serif; font-weight: 700; color: #e2e8f0; }
+td.out { color: #f87171 !important; font-weight: 700; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 9px; font-size: 11px; font-weight: 700; }
+
+.comp-block { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+.comp-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.comp-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.comp-name { font-weight: 700; font-size: 15px; }
+.comp-spec { font-size: 12px; color: #4a6080; }
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+.stat-box { background: #0f172a; border-radius: 7px; padding: 10px 12px; }
+.stat-lbl { font-size: 10px; color: #4a6080; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.stat-val { font-size: 16px; font-weight: 700; }
+.nota-box { border-left: 3px solid; border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 12px; font-size: 13px; line-height: 1.6; }
+
+.next-panel { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.next-title { font-weight: 700; font-size: 15px; margin-bottom: 14px; color: #c8daf0; }
+.countdown { font-size: 32px; font-weight: 800; margin: 10px 0 4px; }
+.countdown.ok { color: #4ade80; }
+.countdown.warn { color: #fbbf24; }
+.countdown.err { color: #f87171; }
+
+.no-access { text-align: center; padding: 80px 20px; }
+.no-access h2 { color: #f87171; margin-bottom: 12px; }
+
+@media(max-width:700px) { .kpi-row { grid-template-columns: 1fr 1fr; } .stats-row { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">⚗️ <span>Lega</span>Tracker</div>
+  <span class="client-badge" id="nav-badge">—</span>
+  <div class="nav-right">
+    <button class="btn-logout" onclick="logout()">🚪 Esci</button>
+  </div>
+</nav>
+
+<div class="wrap" id="main-content">
+  <div style="text-align:center;padding:60px 20px;color:#4a6080;">⏳ Caricamento...</div>
+</div>
+
+<script>
+// ─── SPECS & NOTES ────────────────────────────────────────────────────────
+const SPECS = {
+  Nichel: { min: 0.010, max: 0.100, color: '#4da6ff', cls: 'ni' },
+  Rame:   { min: 0.400, max: 0.850, color: '#f97316', cls: 'cu' },
+  Piombo: { min: null,  max: 0.100, color: '#4ade80', cls: 'pb' },
+};
+const COMPS = ['Nichel', 'Rame', 'Piombo'];
+
+const DEFAULT_NOTES = {
+  Nichel: {
+    high:     '⚠️ Ni elevato: verificare apporto da componenti o contaminazione vasca. Considerare diluizione con lega fresca.',
+    low:      '📉 Ni in calo: monitorare consumo. Aggiunta lega madre Ni-Sn se <0,020%.',
+    unstable: '⚡ Ni instabile (CV>10%): controllare dissoluzione irregolare o stratificazione vasca.',
+    ok:       '✅ Nichel nella norma. Continuare monitoraggio periodico.'
+  },
+  Rame: {
+    high:     '🔴 Cu elevato: forte dissoluzione PCB. Ridurre tempi di contatto o rabboccare con lega vergine SN100CS.',
+    low:      '📉 Cu basso: rabbocco standard con SN100CS.',
+    unstable: '⚡ Cu variabile (CV>10%): verificare temperatura vasca e pulizia ugelli selettiva.',
+    ok:       '✅ Rame nella norma. Continuare monitoraggio periodico.'
+  },
+  Piombo: {
+    high:     '🚨 Pb oltre soglia! Identificare fonte contaminazione (componenti, frame, fixtures). Azione urgente!',
+    low:      '✅ Piombo nella norma.',
+    unstable: '⚡ Pb oscillante: possibile contaminazione episodica. Tracciare lotti componenti.',
+    ok:       '✅ Piombo nella norma. Continuare monitoraggio periodico.'
+  }
+};
+
+// ─── STATS ───────────────────────────────────────────────────────────────
+const mean = a => a.reduce((x,y)=>x+y,0)/a.length;
+const std  = a => { const m=mean(a); return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/Math.max(a.length-1,1)); };
+const cv   = a => { const m=mean(a); return m ? std(a)/m*100 : 0; };
+const d3x  = a => a.length>=3 ? a[a.length-1]-a[a.length-3] : 0;
+
+function stato(v, comp, cvp) {
+  const s=SPECS[comp];
+  if ((s.min&&v<s.min)||(s.max&&v>s.max)) return 'err';
+  if (cvp>10) return 'warn';
+  if (cvp>5)  return 'warn';
+  return 'ok';
+}
+function getNota(vals, comp, noteCliente) {
+  const s=SPECS[comp]; const l=vals[vals.length-1]; const c=cv(vals);
+  const n = (noteCliente && noteCliente[comp]) ? noteCliente[comp] : DEFAULT_NOTES[comp];
+  if (s.max&&l>s.max) return {t:n.high,cls:'err'};
+  if (s.min&&l<s.min) return {t:n.low,cls:'warn'};
+  if (c>10) return {t:n.unstable,cls:'warn'};
+  return {t:n.ok,cls:'ok'};
+}
+function statolabel(s) { return {ok:'✅ OK',warn:'⚠️ ATTENZIONE',err:'🔴 FUORI SPEC'}[s]; }
+function notaStyle(cls) {
+  return {
+    ok:   {border:'#4ade80',bg:'#0a2a14',color:'#86efac'},
+    warn: {border:'#fbbf24',bg:'#2a1a00',color:'#fde68a'},
+    err:  {border:'#f87171',bg:'#2a0a0a',color:'#fca5a5'},
+  }[cls];
+}
+function cvColor(c) { return c<=5?'#4ade80':c<=10?'#fbbf24':'#f87171'; }
+function badgeHtml(s) {
+  const bg={ok:'#14532d',warn:'#78350f',err:'#7f1d1d'}[s];
+  const col={ok:'#4ade80',warn:'#fbbf24',err:'#f87171'}[s];
+  return `<span class="badge" style="background:${bg};color:${col}">${statolabel(s)}</span>`;
+}
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+let DB = null;
+let activePoz = 0;
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+window.onload = function() {
+  const raw = sessionStorage.getItem('lt_data');
+  const codice = sessionStorage.getItem('lt_cliente');
+  if (!raw) {
+    document.getElementById('main-content').innerHTML = `
+      <div class="no-access">
+        <h2>⚠️ Sessione scaduta</h2>
+        <p style="color:#4a6080;margin-bottom:20px">Effettua nuovamente l'accesso.</p>
+        <a href="index.html" style="color:#60a5fa">← Torna al login</a>
+      </div>`;
+    return;
+  }
+  DB = JSON.parse(raw);
+  document.getElementById('nav-badge').textContent = DB.cliente || codice;
+  renderDashboard();
+};
+
+function logout() {
+  sessionStorage.removeItem('lt_data');
+  sessionStorage.removeItem('lt_cliente');
+  window.location.href = 'index.html';
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────
+function getPozVals(poz, comp) { return poz.analisi.map(a=>a[comp]); }
+function getPozDates(poz)       { return poz.analisi.map(a=>a.data); }
+
+function renderDashboard() {
+  const poz = DB.pozzetti[activePoz];
+  const dates = getPozDates(poz);
+
+  let html = `
+    <div class="page-title">${DB.cliente} – ${poz.label}</div>
+    <div class="page-sub">${DB.macchina} / ${DB.lega} &nbsp;·&nbsp; Ultima analisi: <strong>${dates[dates.length-1]}</strong></div>
+    <div class="poz-tabs" id="poz-tabs">
+      ${DB.pozzetti.map((p,i)=>`<div class="poz-tab ${i===activePoz?'active':''}" onclick="switchPoz(${i})">${p.label}</div>`).join('')}
+    </div>`;
+
+  // KPI
+  html += `<div class="kpi-row">`;
+  COMPS.forEach(comp => {
+    const vals=getPozVals(poz,comp), last=vals[vals.length-1], s=SPECS[comp];
+    const c=cv(vals), st=stato(last,comp,c), dl=d3x(vals), avg=mean(vals);
+    const cvPct=Math.min(c/20*100,100);
+    html += `<div class="kpi ${s.cls}">
+      <div class="kpi-stato s-${st}">${statolabel(st)}</div>
+      <div class="kpi-label">${comp} (max: ${s.max?s.max.toFixed(3):'—'})</div>
+      <div class="kpi-val" style="color:${st==='err'?'#f87171':st==='warn'?'#fbbf24':'#e2e8f0'}">${last.toFixed(4)}<small> %</small></div>
+      <div class="kpi-meta">Media: ${avg.toFixed(4)} | Δult.3: ${dl>=0?'+':''}${dl.toFixed(4)}</div>
+      <div class="cv-bar"><div class="cv-fill" style="width:${cvPct}%;background:${cvColor(c)}"></div></div>
+      <div style="font-size:10px;color:${cvColor(c)};margin-top:3px;">CV% ${c.toFixed(1)}%</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Prossima analisi
+  if (DB.prossima_analisi) {
+    const pa = DB.prossima_analisi;
+    const oggi = new Date();
+    let giorni = '—'; let countClass = 'ok';
+    if (pa.data_calcolata) {
+      const parts = pa.data_calcolata.split('/');
+      const dataTarget = new Date(`20${parts[2]}`, parts[1]-1, parts[0]);
+      const diff = Math.ceil((dataTarget - oggi) / (1000*60*60*24));
+      giorni = diff;
+      countClass = diff < 0 ? 'err' : diff <= 14 ? 'warn' : 'ok';
+    }
+    html += `<div class="next-panel">
+      <div class="next-title">📅 Prossima analisi prevista</div>
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:12px;color:#4a6080;">Data prevista</div>
+          <div style="font-size:22px;font-weight:700;color:#60a5fa">${pa.data_calcolata || '—'}</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:#4a6080;">Giorni mancanti</div>
+          <div class="countdown ${countClass}">${typeof giorni==='number'?(giorni<0?'SCADUTA':giorni+' gg'):giorni}</div>
+        </div>
+        ${pa.nota_promemoria?`<div style="flex:1;min-width:200px;background:#0f172a;border-radius:8px;padding:12px 14px;font-size:13px;color:#94a3b8;border-left:3px solid #3b82f6">📝 ${pa.nota_promemoria}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  // Storico
+  html += `<div class="panel"><div class="panel-hdr"><span class="panel-title">📋 Storico analisi</span></div><div style="overflow-x:auto"><table>`;
+  html += `<thead><tr><th>Componente</th><th>Spec. Max</th>`;
+  dates.forEach(d=>html+=`<th>${d}</th>`);
+  html += `</tr></thead><tbody>`;
+  COMPS.forEach(comp=>{
+    const vals=getPozVals(poz,comp), s=SPECS[comp];
+    html+=`<tr><td class="tdl">${comp}</td><td>${s.max?s.max.toFixed(4):'—'}</td>`;
+    vals.forEach(v=>{ const out=(s.max&&v>s.max)||(s.min&&v<s.min); html+=`<td class="${out?'out':''}">${v.toFixed(4)}</td>`; });
+    html+=`</tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  // Grafici + note
+  COMPS.forEach(comp=>{
+    const vals=getPozVals(poz,comp), s=SPECS[comp];
+    const last=vals[vals.length-1], c=cv(vals), dl=d3x(vals), avg=mean(vals);
+    const st=stato(last,comp,c), n=getNota(vals,comp,DB.note_correttive), ns=notaStyle(n.cls);
+    html += `<div class="comp-block">
+      <div class="comp-hdr">
+        <div class="comp-dot" style="background:${s.color}"></div>
+        <span class="comp-name">${comp}</span>
+        <span class="comp-spec">max: ${s.max?s.max.toFixed(3):'—'}</span>
+        <div style="margin-left:auto">${badgeHtml(st)}</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-lbl">Ultimo valore</div><div class="stat-val" style="color:${st==='err'?'#f87171':st==='warn'?'#fbbf24':'#e2e8f0'}">${last.toFixed(4)}%</div></div>
+        <div class="stat-box"><div class="stat-lbl">Media storica</div><div class="stat-val" style="color:#94a3b8">${avg.toFixed(4)}%</div></div>
+        <div class="stat-box"><div class="stat-lbl">CV% variabilità</div><div class="stat-val" style="color:${cvColor(c)}">${c.toFixed(1)}% ${c<=5?'🟢':c<=10?'🟡':'🔴'}</div></div>
+        <div class="stat-box"><div class="stat-lbl">Δ ultime 3</div><div class="stat-val" style="color:${Math.abs(dl)>avg*0.05?'#fbbf24':'#94a3b8'}">${dl>=0?'+':''}${dl.toFixed(4)}%</div></div>
+      </div>
+      ${buildSVG(vals, dates, s.color, s.max, s.min, comp)}
+      <div class="nota-box" style="border-color:${ns.border};background:${ns.bg};color:${ns.color}">${n.t}</div>
+    </div>`;
+  });
+
+  document.getElementById('main-content').innerHTML = html;
+}
+
+function buildSVG(vals, dates, color, specMax, specMin, comp) {
+  const W=600,H=110,PX=10,PY=8;
+  const all=[...vals,specMax,specMin].filter(v=>v!=null);
+  const minV=Math.min(...all)*0.96, maxV=Math.max(...all)*1.04;
+  const n=vals.length;
+  const xS=i=>PX+(i/(Math.max(n-1,1)))*(W-PX*2);
+  const yS=v=>H-PY-((v-minV)/(maxV-minV||1))*(H-PY*2);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:110px;display:block">
+  <defs><linearGradient id="grad-${comp}" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="${color}" stop-opacity="0.25"/>
+    <stop offset="100%" stop-color="${color}" stop-opacity="0.02"/>
+  </linearGradient></defs>`;
+  const areaPath=`M${xS(0)},${yS(vals[0])} `+vals.map((_,i)=>`L${xS(i)},${yS(vals[i])}`).join(' ')+` L${xS(n-1)},${H} L${xS(0)},${H} Z`;
+  svg+=`<path d="${areaPath}" fill="url(#grad-${comp})"/>`;
+  if (specMax) svg+=`<line x1="${PX}" y1="${yS(specMax)}" x2="${W-PX}" y2="${yS(specMax)}" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.8"/>`;
+  if (specMin) svg+=`<line x1="${PX}" y1="${yS(specMin)}" x2="${W-PX}" y2="${yS(specMin)}" stroke="#f97316" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.8"/>`;
+  const pts=vals.map((_,i)=>`${xS(i)},${yS(vals[i])}`).join(' ');
+  svg+=`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  vals.forEach((v,i)=>{
+    const out=(specMax&&v>specMax)||(specMin&&v<specMin);
+    svg+=`<circle cx="${xS(i)}" cy="${yS(v)}" r="4.5" fill="${out?'#ef4444':color}" stroke="#0a0f1a" stroke-width="1.5"/>`;
+    svg+=`<text x="${xS(i)}" y="${yS(v)-8}" font-size="8" fill="${out?'#f87171':'#4a6080'}" text-anchor="middle">${v.toFixed(4)}</text>`;
+  });
+  svg+=`<text x="${xS(0)}" y="${H-1}" font-size="9" fill="#4a6080">${dates[0]}</text>`;
+  svg+=`<text x="${xS(n-1)}" y="${H-1}" font-size="9" fill="#4a6080" text-anchor="end">${dates[n-1]}</text>`;
+  svg+=`</svg>`;
+  return svg;
+}
+
+function switchPoz(i) { activePoz=i; renderDashboard(); }
+</script>
+</body>
+</html>
