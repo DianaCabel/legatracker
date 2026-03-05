@@ -24,10 +24,10 @@
       "ok":       "✅ Piombo nella norma. [inserire nota di monitoraggio]"
     },
     "Germanio": {
-      "high":     "🔴 Ge elevato (>0,010%): [inserire azione correttiva specifica]",
+      "high":     "🔴 Ge elevato (>0,015%): [inserire azione correttiva specifica]",
       "low":      "📉 Ge basso (<0,007%): [inserire azione correttiva specifica]",
       "unstable": "⚡ Ge instabile: [inserire azione correttiva specifica]",
-      "ok":       "✅ Germanio nella norma (0,007–0,010%). [inserire nota di monitoraggio]"
+      "ok":       "✅ Germanio nella norma (0,007–0,015%). [inserire nota di monitoraggio]"
     }
   },
 
