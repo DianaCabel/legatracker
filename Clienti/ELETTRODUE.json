@@ -1,0 +1,58 @@
+{
+  "cliente": "ELETTRODUE",
+  "riferimento": "Sig. Rettore",
+  "macchina": "LINEA ROHS 1",
+  "lega": "SN100CS+",
+
+  "note_correttive": {
+    "Nichel": {
+      "high":     "⚠️ Ni elevato: verificare apporto da componenti o contaminazione vasca. Considerare diluizione con lega fresca.",
+      "low":      "📉 Ni in calo: monitorare consumo. Aggiunta lega madre Ni-Sn se <0,020%.",
+      "unstable": "⚡ Ni instabile (CV>10%): controllare dissoluzione irregolare o stratificazione vasca.",
+      "ok":       "✅ Nichel nella norma. Continuare monitoraggio periodico."
+    },
+    "Rame": {
+      "high":     "🔴 Cu elevato: forte dissoluzione PCB. Ridurre tempi di contatto o rabboccare con lega vergine SN100CS+.",
+      "low":      "📉 Cu basso: rabbocco standard con SN100CS+.",
+      "unstable": "⚡ Cu variabile (CV>10%): verificare temperatura vasca e pulizia ugelli.",
+      "ok":       "✅ Rame nella norma. Continuare monitoraggio periodico."
+    },
+    "Piombo": {
+      "high":     "🚨 Pb oltre soglia RoHS! Identificare fonte contaminazione (componenti, frame, fixtures). Azione urgente!",
+      "low":      "✅ Piombo nella norma.",
+      "unstable": "⚡ Pb oscillante: possibile contaminazione episodica. Tracciare lotti componenti.",
+      "ok":       "✅ Piombo nella norma. Continuare monitoraggio periodico."
+    },
+    "Germanio": {
+      "high":     "🔴 Ge elevato (>0,015%): consumo eccessivo additivo. Verificare aggiunte recenti e bilanciare il dosaggio.",
+      "low":      "📉 Ge basso (<0,007%): livello insufficiente. Integrare Germanio per mantenere proprietà anti-ossidazione.",
+      "unstable": "⚡ Ge instabile (CV>10%): dosaggio irregolare o agitazione insufficiente. Verificare distribuzione in vasca.",
+      "ok":       "✅ Germanio nella norma (0,007–0,015%). Continuare monitoraggio periodico."
+    }
+  },
+
+  "prossima_analisi": {
+    "frequenza_mesi": 3,
+    "nota_promemoria": "Il livello di germanio è rimasto stabile. Tutti i valori sono nella norma. Nessun intervento necessario."
+  },
+
+  "pozzetti": [
+    {
+      "id": "P1",
+      "label": "Pozzetto 1",
+      "analisi": [
+        { "data": "15/03/24", "Nichel": 0.0434, "Rame": 0.801,  "Piombo": 0.0683, "Germanio": 0.0034 },
+        { "data": "12/06/24", "Nichel": 0.0435, "Rame": 0.804,  "Piombo": 0.0342, "Germanio": 0.0028 },
+        { "data": "28/10/24", "Nichel": 0.0407, "Rame": 0.772,  "Piombo": 0.0153, "Germanio": 0.0034 },
+        { "data": "17/02/25", "Nichel": 0.0375, "Rame": 0.746,  "Piombo": 0.0153, "Germanio": 0.0051 },
+        { "data": "17/03/25", "Nichel": 0.0417, "Rame": 0.762,  "Piombo": 0.0189, "Germanio": 0.0060 },
+        { "data": "17/04/25", "Nichel": 0.0472, "Rame": 0.765,  "Piombo": 0.0226, "Germanio": 0.0050 },
+        { "data": "06/05/25", "Nichel": 0.0439, "Rame": 0.781,  "Piombo": 0.0229, "Germanio": 0.0115 },
+        { "data": "11/06/25", "Nichel": 0.0521, "Rame": 0.843,  "Piombo": 0.0217, "Germanio": 0.0061 },
+        { "data": "16/07/25", "Nichel": 0.0434, "Rame": 0.834,  "Piombo": 0.0209, "Germanio": 0.0062 },
+        { "data": "18/09/25", "Nichel": 0.0382, "Rame": 0.821,  "Piombo": 0.0204, "Germanio": 0.0056 },
+        { "data": "11/11/25", "Nichel": 0.0405, "Rame": 0.843,  "Piombo": 0.0229, "Germanio": 0.0058 }
+      ]
+    }
+  ]
+}
