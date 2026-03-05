@@ -97,7 +97,7 @@ const SPECS = {
   Nichel:   { min: 0.010, max: 0.100, color: '#4da6ff', cls: 'ni' },
   Rame:     { min: 0.400, max: 0.850, color: '#f97316', cls: 'cu' },
   Piombo:   { min: null,  max: 0.100, color: '#4ade80', cls: 'pb' },
-  Germanio: { min: 0.007, max: 0.010, color: '#c084fc', cls: 'ge' },
+  Germanio: { min: 0.007, max: 0.015, color: '#c084fc', cls: 'ge' },
 };
 const COMPS = ['Nichel', 'Rame', 'Piombo', 'Germanio'];
 
@@ -121,10 +121,10 @@ const DEFAULT_NOTES = {
     ok:       '✅ Piombo nella norma. Continuare monitoraggio periodico.'
   },
   Germanio: {
-    high:     '🔴 Ge elevato (>0,010%): consumo eccessivo additivo. Verificare aggiunte recenti e bilanciare il dosaggio.',
+    high:     '🔴 Ge elevato (>0,015%): consumo eccessivo additivo. Verificare aggiunte recenti e bilanciare il dosaggio.',
     low:      '📉 Ge basso (<0,007%): livello insufficiente. Integrare Germanio per mantenere proprietà anti-ossidazione.',
     unstable: '⚡ Ge instabile (CV>10%): dosaggio irregolare o agitazione insufficiente. Verificare distribuzione in vasca.',
-    ok:       '✅ Germanio nella norma (0,007–0,010%). Continuare monitoraggio periodico.'
+    ok:       '✅ Germanio nella norma (0,007–0,015%). Continuare monitoraggio periodico.'
   }
 };
 
