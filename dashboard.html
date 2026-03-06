@@ -375,6 +375,7 @@ function loadFile(input) {
       if(!DB.note_correttive) DB.note_correttive=JSON.parse(JSON.stringify(DEFAULT_NOTES));
       if(!DB.prossima_analisi) DB.prossima_analisi={frequenza_mesi:3,nota_promemoria:''};
       activePoz=0;
+      aggiornaDataCalcolata();
       saveRecent(file.name, DB.cliente, DB.riferimento);
       openDashboard();
     } catch(err){ alert('File JSON non valido:\n'+err.message); }
@@ -396,7 +397,9 @@ dz.addEventListener('drop',e=>{
         DB=JSON.parse(ev.target.result);
         if(!DB.note_correttive) DB.note_correttive=JSON.parse(JSON.stringify(DEFAULT_NOTES));
         if(!DB.prossima_analisi) DB.prossima_analisi={frequenza_mesi:3,nota_promemoria:''};
-        activePoz=0; openDashboard();
+        activePoz=0;
+        aggiornaDataCalcolata();
+        openDashboard();
       }catch(err){alert('JSON non valido');}
     };
     r.readAsText(f);
@@ -593,6 +596,7 @@ function addAnalysis(){
   const d=new Date(dateRaw);
   const label=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getFullYear()).slice(2)}`;
   DB.pozzetti[pi].analisi.push({data:label,Nichel:ni,Rame:cu,Piombo:pb,Germanio:ge});
+  aggiornaDataCalcolata();
 
   const notes=getNotes();
   let html=`<div style="color:#4ade80;font-weight:700;margin-bottom:12px;">✅ Analisi del ${label} registrata! Ricorda di salvare il JSON.</div>`;
@@ -693,11 +697,26 @@ function renderSchedule(){
 function setFreq(m){
   if(!DB) return;
   DB.prossima_analisi.frequenza_mesi=m;
+  aggiornaDataCalcolata();
   renderSchedule();
 }
 function saveMemo(){
   if(!DB) return;
   DB.prossima_analisi.nota_promemoria=document.getElementById('memo-input').value;
+}
+function aggiornaDataCalcolata(){
+  if(!DB) return;
+  // Prendi l'ultima data fra tutti i pozzetti
+  let lastDateStr='';
+  DB.pozzetti.forEach(p=>{
+    const dates=getPozDates(p);
+    const last=dates[dates.length-1];
+    if(!lastDateStr||parseDate(last)>parseDate(lastDateStr)) lastDateStr=last;
+  });
+  if(!lastDateStr) return;
+  const freq=DB.prossima_analisi.frequenza_mesi||3;
+  const nextDate=addMonths(parseDate(lastDateStr),freq);
+  DB.prossima_analisi.data_calcolata=formatDate(nextDate);
 }
 
 // ═══════════════════════════════════════════════════════════════
