@@ -320,6 +320,7 @@ const DEFAULT_NOTES = {
 const mean = a => a.reduce((x,y)=>x+y,0)/a.length;
 const std  = a => { const m=mean(a); return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/Math.max(a.length-1,1)); };
 const cv   = a => { const m=mean(a); return m ? std(a)/m*100 : 0; };
+const cv3  = a => { const s=a.slice(-3); const m=mean(s); return m ? std(s)/m*100 : 0; };
 const d3   = a => a.length>=3 ? a[a.length-1]-a[a.length-3] : 0;
 
 function getStato(v, comp, cvp) {
@@ -346,7 +347,7 @@ function notaStyle(cls) {
 
 function getNota(vals, comp, notesObj) {
   const s=SPECS[comp]; const last=vals[vals.length-1];
-  const c=cv(vals); const n=notesObj[comp]||DEFAULT_NOTES[comp];
+  const c=cv3(vals); const n=notesObj[comp]||DEFAULT_NOTES[comp];
   if(s.max&&last>s.max) return {t:n.high, cls:'err'};
   if(s.min&&last<s.min) return {t:n.low,  cls:'warn'};
   if(c>30) return {t:n.unstable, cls:'warn'};
@@ -472,7 +473,7 @@ function renderClient(){
   // KPI
   document.getElementById('kpi-row').innerHTML=COMPS.map(comp=>{
     const vals=getPozVals(poz,comp), last=vals[vals.length-1], s=SPECS[comp];
-    const c=cv(vals), st=getStato(last,comp,c), dl=d3(vals), avg=mean(vals);
+    const c=cv3(vals), st=getStato(last,comp,c), dl=d3(vals), avg=mean(vals);
     const cvPct=Math.min(c/20*100,100);
     return `<div class="kpi ${s.cls}">
       <div class="kpi-stato s-${st}">${statoLabel(st)}</div>
@@ -502,7 +503,7 @@ function renderClient(){
   // Stats table
   h=`<thead><tr><th>Componente</th><th>Media</th><th>Std Dev</th><th>CV%</th><th>Δ ultime 3</th><th>Ultimo</th><th>Stato</th></tr></thead><tbody>`;
   COMPS.forEach(comp=>{
-    const vals=getPozVals(poz,comp), m=mean(vals), s2=std(vals), c=cv(vals), dl=d3(vals), last=vals[vals.length-1];
+    const vals=getPozVals(poz,comp), m=mean(vals), s2=std(vals), c=cv3(vals), dl=d3(vals), last=vals[vals.length-1];
     const st=getStato(last,comp,c);
     h+=`<tr>
       <td class="tdl">${comp}</td>
@@ -520,7 +521,7 @@ function renderClient(){
   cp.innerHTML='';
   COMPS.forEach(comp=>{
     const vals=getPozVals(poz,comp), s=SPECS[comp];
-    const last=vals[vals.length-1], c=cv(vals), dl=d3(vals), avg=mean(vals);
+    const last=vals[vals.length-1], c=cv3(vals), dl=d3(vals), avg=mean(vals);
     const st=getStato(last,comp,c), n=getNota(vals,comp,notes), ns=notaStyle(n.cls);
     cp.innerHTML+=`<div class="comp-block">
       <div class="comp-hdr">

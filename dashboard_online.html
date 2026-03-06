@@ -132,6 +132,7 @@ const DEFAULT_NOTES = {
 const mean = a => a.reduce((x,y)=>x+y,0)/a.length;
 const std  = a => { const m=mean(a); return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/Math.max(a.length-1,1)); };
 const cv   = a => { const m=mean(a); return m ? std(a)/m*100 : 0; };
+const cv3  = a => { const s=a.slice(-3); const m=mean(s); return m ? std(s)/m*100 : 0; };
 const d3x  = a => a.length>=3 ? a[a.length-1]-a[a.length-3] : 0;
 
 function stato(v, comp, cvp) {
@@ -142,7 +143,7 @@ function stato(v, comp, cvp) {
   return 'ok';
 }
 function getNota(vals, comp, noteCliente) {
-  const s=SPECS[comp]; const l=vals[vals.length-1]; const c=cv(vals);
+  const s=SPECS[comp]; const l=vals[vals.length-1]; const c=cv3(vals);
   const n = (noteCliente && noteCliente[comp]) ? noteCliente[comp] : DEFAULT_NOTES[comp];
   if (s.max&&l>s.max) return {t:n.high,cls:'err'};
   if (s.min&&l<s.min) return {t:n.low,cls:'warn'};
@@ -211,7 +212,7 @@ function renderDashboard() {
   html += `<div class="kpi-row">`;
   COMPS.forEach(comp => {
     const vals=getPozVals(poz,comp), last=vals[vals.length-1], s=SPECS[comp];
-    const c=cv(vals), st=stato(last,comp,c), dl=d3x(vals), avg=mean(vals);
+    const c=cv3(vals), st=stato(last,comp,c), dl=d3x(vals), avg=mean(vals);
     const cvPct=Math.min(c/20*100,100);
     html += `<div class="kpi ${s.cls}">
       <div class="kpi-stato s-${st}">${statolabel(st)}</div>
@@ -269,7 +270,7 @@ function renderDashboard() {
   // Grafici + note
   COMPS.forEach(comp=>{
     const vals=getPozVals(poz,comp), s=SPECS[comp];
-    const last=vals[vals.length-1], c=cv(vals), dl=d3x(vals), avg=mean(vals);
+    const last=vals[vals.length-1], c=cv3(vals), dl=d3x(vals), avg=mean(vals);
     const st=stato(last,comp,c), n=getNota(vals,comp,DB.note_correttive), ns=notaStyle(n.cls);
     html += `<div class="comp-block">
       <div class="comp-hdr">
