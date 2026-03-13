@@ -108,6 +108,7 @@ td.out { color: #f87171 !important; font-weight: 700; }
   <span class="client-badge" id="nav-badge">—</span>
   <div style="display:flex;gap:6px;margin-left:16px">
     <button class="main-tab active" id="tab-dashboard" onclick="showTab('dashboard')">📊 Dashboard</button>
+    <button class="main-tab" id="tab-acquisti" onclick="showTab('acquisti')">📦 Acquisti</button>
     <button class="main-tab" id="tab-documenti" onclick="showTab('documenti')">📁 Documenti</button>
   </div>
   <div class="nav-right">
@@ -118,6 +119,7 @@ td.out { color: #f87171 !important; font-weight: 700; }
 <div class="wrap" id="main-content">
   <div style="text-align:center;padding:60px 20px;color:#4a6080;">⏳ Caricamento...</div>
 </div>
+<div class="wrap" id="acq-content" style="display:none"></div>
 <div class="wrap" id="doc-content" style="display:none"></div>
 
 <script>
@@ -358,10 +360,65 @@ let activeTab = 'dashboard';
 function showTab(tab) {
   activeTab = tab;
   document.getElementById('tab-dashboard').classList.toggle('active', tab==='dashboard');
+  document.getElementById('tab-acquisti').classList.toggle('active', tab==='acquisti');
   document.getElementById('tab-documenti').classList.toggle('active', tab==='documenti');
   document.getElementById('main-content').style.display = tab==='dashboard' ? '' : 'none';
-  document.getElementById('doc-content').style.display = tab==='documenti' ? '' : 'none';
+  document.getElementById('acq-content').style.display  = tab==='acquisti'  ? '' : 'none';
+  document.getElementById('doc-content').style.display  = tab==='documenti' ? '' : 'none';
+  if (tab==='acquisti')  renderAcquisti();
   if (tab==='documenti') renderDocumenti();
+}
+
+// ─── ACQUISTI ─────────────────────────────────────────────────────────────
+function renderAcquisti() {
+  const acquisti = (DB.acquisti || []).slice().sort((a,b)=>{
+    const pd = s => { const p=s.split('/'); return new Date(p[2],p[1]-1,p[0]); };
+    return pd(b.data) - pd(a.data);
+  });
+
+  // Calcola totali per prodotto
+  const totali = {};
+  acquisti.forEach(a => {
+    if (!totali[a.prodotto]) totali[a.prodotto] = { kg: 0, n: 0 };
+    totali[a.prodotto].kg += a.quantita_kg;
+    totali[a.prodotto].n++;
+  });
+
+  let h = `<div class="page-title">📦 Storico Acquisti</div>
+  <div class="page-sub">${DB.cliente} &nbsp;·&nbsp; ${acquisti.length} movimenti registrati</div>`;
+
+  // KPI riepilogo per prodotto
+  if (Object.keys(totali).length > 0) {
+    h += `<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px">`;
+    Object.entries(totali).forEach(([prod, t]) => {
+      h += `<div class="kpi" style="flex:1;min-width:180px">
+        <div class="kpi-label">${prod}</div>
+        <div class="kpi-val">${t.kg.toFixed(2)}<small> kg</small></div>
+        <div class="kpi-meta">${t.n} consegn${t.n===1?'a':'e'} totali</div>
+      </div>`;
+    });
+    h += `</div>`;
+  }
+
+  // Tabella
+  h += `<div class="panel"><div class="panel-hdr"><span class="panel-title">📋 Dettaglio movimenti</span></div>
+  <div style="overflow-x:auto"><table>
+  <thead><tr><th>Data</th><th>Prodotto</th><th>Quantità (kg)</th></tr></thead><tbody>`;
+
+  if (acquisti.length === 0) {
+    h += `<tr><td colspan="3" style="text-align:center;color:#4a6080;padding:30px">Nessun acquisto registrato</td></tr>`;
+  } else {
+    acquisti.forEach(a => {
+      h += `<tr>
+        <td>${a.data}</td>
+        <td class="tdl">${a.prodotto}</td>
+        <td>${a.quantita_kg.toFixed(2)}</td>
+      </tr>`;
+    });
+  }
+  h += `</tbody></table></div></div>`;
+
+  document.getElementById('acq-content').innerHTML = h;
 }
 
 // ─── DOCUMENTI ────────────────────────────────────────────────────────────
