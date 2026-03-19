@@ -5,67 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LegatTracker – Dashboard</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0f1a; color: #e2e8f0; min-height: 100vh; }
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap');
 
-nav { background: #111827; border-bottom: 2px solid #1d4ed8; padding: 0 24px; display: flex; align-items: center; gap: 14px; height: 54px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
-.logo { font-size: 17px; font-weight: 800; color: #fff; margin-right: 12px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+
+nav { background: #ffffff; border-bottom: 2px solid #b01c2e; padding: 0 24px; display: flex; align-items: center; gap: 14px; height: 54px; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
+.logo { font-size: 17px; font-weight: 800; color: #1a1a2e; margin-right: 12px; }
 .logo span { color: #60a5fa; }
-.client-badge { background: #1e3a5a; color: #60a5fa; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.client-badge { background: #e8ebf8; color: #1d4ed8; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
 .nav-right { margin-left: auto; }
-.btn-logout { background: transparent; border: 1px solid #2a3a5a; color: #94a3b8; padding: 6px 14px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.btn-logout { background: transparent; border: 1px solid #d0d5e0; color: #5a6070; padding: 6px 14px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 600; }
 .btn-logout:hover { border-color: #f87171; color: #f87171; }
 
 .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
 .page-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-.page-sub { font-size: 13px; color: #4a6080; margin-bottom: 20px; }
+.page-sub { font-size: 13px; color: #7a8090; margin-bottom: 20px; }
 
 .poz-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-.poz-tab { padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1px solid #2a3a5a; color: #94a3b8; background: #1e2d45; transition: all .2s; }
-.poz-tab.active { background: #1d4ed8; border-color: #3b82f6; color: #fff; }
+.poz-tab { padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1px solid #d0d5e0; color: #5a6070; background: #eef0f5; transition: all .2s; }
+.poz-tab.active { background: #b01c2e; border-color: #b01c2e; color: #fff; }
 
 .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-.kpi { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 16px; position: relative; overflow: hidden; }
+.kpi { background: #ffffff; border: 1px solid #d0d5e0; border-radius: 10px; padding: 16px; position: relative; overflow: hidden; }
 .kpi::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
 .kpi.ni::before { background: #4da6ff; } .kpi.cu::before { background: #f97316; } .kpi.pb::before { background: #4ade80; } .kpi.ge::before { background: #c084fc; }
-.kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a6080; margin-bottom: 8px; }
+.kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #7a8090; margin-bottom: 8px; }
 .kpi-val { font-size: 28px; font-weight: 700; margin-bottom: 3px; }
-.kpi-val small { font-size: 14px; color: #4a6080; }
-.kpi-meta { font-size: 11px; color: #4a6080; }
+.kpi-val small { font-size: 14px; color: #7a8090; }
+.kpi-meta { font-size: 11px; color: #7a8090; }
 .kpi-stato { position: absolute; top: 12px; right: 12px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
 .s-ok { background: #14532d; color: #4ade80; }
 .s-warn { background: #78350f; color: #fbbf24; }
 .s-err { background: #7f1d1d; color: #f87171; }
-.cv-bar { height: 5px; background: #0f172a; border-radius: 3px; margin-top: 6px; overflow: hidden; }
+.cv-bar { height: 5px; background: #eef0f4; border-radius: 3px; margin-top: 6px; overflow: hidden; }
 .cv-fill { height: 100%; border-radius: 3px; }
 
-.panel { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-.panel-hdr { padding: 12px 20px; background: #1e2d45; border-bottom: 1px solid #1e3a5a; }
-.panel-title { font-weight: 700; font-size: 14px; color: #c8daf0; }
+.panel { background: #ffffff; border: 1px solid #d0d5e0; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+.panel-hdr { padding: 12px 20px; background: #eef0f5; border-bottom: 1px solid #d0d5e0; }
+.panel-title { font-weight: 700; font-size: 14px; color: #2a3a5a; }
 .panel-body { padding: 20px; }
 
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #1e2d45; color: #64748b; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; text-align: center; }
-td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #1a2a3a; font-family: monospace; color: #94a3b8; }
+th { background: #f4f6fa; color: #7a8090; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; text-align: center; }
+td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #1a2a3a; font-family: monospace; color: #5a6070; }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #1e2d45; }
-td.tdl { text-align: left; font-family: 'Segoe UI', sans-serif; font-weight: 700; color: #e2e8f0; }
+tr:hover td { background: #eef0f5; }
+td.tdl { text-align: left; font-family: 'Segoe UI', sans-serif; font-weight: 700; color: #1a1a2e; }
 td.out { color: #f87171 !important; font-weight: 700; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 9px; font-size: 11px; font-weight: 700; }
 
-.comp-block { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+.comp-block { background: #ffffff; border: 1px solid #d0d5e0; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
 .comp-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .comp-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 .comp-name { font-weight: 700; font-size: 15px; }
-.comp-spec { font-size: 12px; color: #4a6080; }
+.comp-spec { font-size: 12px; color: #7a8090; }
 .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
-.stat-box { background: #0f172a; border-radius: 7px; padding: 10px 12px; }
-.stat-lbl { font-size: 10px; color: #4a6080; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.stat-box { background: #eef0f4; border-radius: 7px; padding: 10px 12px; }
+.stat-lbl { font-size: 10px; color: #7a8090; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
 .stat-val { font-size: 16px; font-weight: 700; }
 .nota-box { border-left: 3px solid; border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 12px; font-size: 13px; line-height: 1.6; }
 
-.next-panel { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-.next-title { font-weight: 700; font-size: 15px; margin-bottom: 14px; color: #c8daf0; }
+.next-panel { background: #ffffff; border: 1px solid #d0d5e0; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.next-title { font-weight: 700; font-size: 15px; margin-bottom: 14px; color: #2a3a5a; }
 .countdown { font-size: 32px; font-weight: 800; margin: 10px 0 4px; }
 .countdown.ok { color: #4ade80; }
 .countdown.warn { color: #fbbf24; }
@@ -75,28 +77,28 @@ td.out { color: #f87171 !important; font-weight: 700; }
 .no-access h2 { color: #f87171; margin-bottom: 12px; }
 
 /* NAV TABS */
-.main-tabs { display: flex; gap: 6px; margin-bottom: 24px; border-bottom: 2px solid #1e3a5a; padding-bottom: 0; }
-.main-tab { padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; color: #4a6080; border-radius: 7px 7px 0 0; border: 1px solid transparent; border-bottom: none; transition: all .2s; margin-bottom: -2px; }
-.main-tab.active { background: #1e2d45; border-color: #1e3a5a; color: #60a5fa; border-bottom: 2px solid #0a0f1a; }
-.main-tab:hover:not(.active) { color: #94a3b8; }
+.main-tabs { display: flex; gap: 6px; margin-bottom: 24px; border-bottom: 2px solid #d0d5e0; padding-bottom: 0; }
+.main-tab { padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; color: #7a8090; border-radius: 7px 7px 0 0; border: 1px solid transparent; border-bottom: none; transition: all .2s; margin-bottom: -2px; }
+.main-tab.active { background: #ffffff; border-color: #d0d5e0; color: #b01c2e; border-bottom: 2px solid #f0f2f5; }
+.main-tab:hover:not(.active) { color: #5a6070; }
 
 /* DOCUMENTI */
 .doc-section { margin-bottom: 28px; }
-.doc-section-title { font-size: 13px; font-weight: 700; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #1e3a5a; }
+.doc-section-title { font-size: 13px; font-weight: 700; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #d0d5e0; }
 .fornitore-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.fornitore-tab { padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid #2a3a5a; color: #94a3b8; background: #1e2d45; transition: all .2s; }
-.fornitore-tab.active { background: #1d4ed8; border-color: #3b82f6; color: #fff; }
+.fornitore-tab { padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid #d0d5e0; color: #5a6070; background: #eef0f5; transition: all .2s; }
+.fornitore-tab.active { background: #b01c2e; border-color: #b01c2e; color: #fff; }
 .doc-cat-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-.doc-cat-tab { padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid #2a3a5a; color: #94a3b8; background: transparent; transition: all .2s; }
-.doc-cat-tab.active { background: #0f2a4a; border-color: #3b82f6; color: #60a5fa; }
+.doc-cat-tab { padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; border: 1px solid #d0d5e0; color: #5a6070; background: transparent; transition: all .2s; }
+.doc-cat-tab.active { background: #f0e8ea; border-color: #b01c2e; color: #b01c2e; }
 .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-.doc-card { background: #111827; border: 1px solid #1e3a5a; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: all .2s; }
-.doc-card:hover { border-color: #3b82f6; background: #1e2d45; }
+.doc-card { background: #ffffff; border: 1px solid #d0d5e0; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: all .2s; }
+.doc-card:hover { border-color: #3b82f6; background: #eef0f5; }
 .doc-icon { font-size: 28px; flex-shrink: 0; }
 .doc-info { flex: 1; min-width: 0; }
-.doc-name { font-size: 13px; font-weight: 700; color: #e2e8f0; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.doc-meta { font-size: 11px; color: #4a6080; }
-.doc-empty { color: #4a6080; font-size: 13px; padding: 20px; text-align: center; font-style: italic; }
+.doc-name { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-meta { font-size: 11px; color: #7a8090; }
+.doc-empty { color: #7a8090; font-size: 13px; padding: 20px; text-align: center; font-style: italic; }
 
 @media(max-width:700px) { .kpi-row { grid-template-columns: 1fr 1fr; } .stats-row { grid-template-columns: 1fr 1fr; } }
 </style>
@@ -118,7 +120,7 @@ td.out { color: #f87171 !important; font-weight: 700; }
 </nav>
 
 <div class="wrap" id="main-content">
-  <div style="text-align:center;padding:60px 20px;color:#4a6080;">⏳ Caricamento...</div>
+  <div style="text-align:center;padding:60px 20px;color:#7a8090;">⏳ Caricamento...</div>
 </div>
 <div class="wrap" id="acq-content" style="display:none"></div>
 <div class="wrap" id="mkt-content" style="display:none"></div>
@@ -210,7 +212,7 @@ window.onload = function() {
     document.getElementById('main-content').innerHTML = `
       <div class="no-access">
         <h2>⚠️ Sessione scaduta</h2>
-        <p style="color:#4a6080;margin-bottom:20px">Effettua nuovamente l'accesso.</p>
+        <p style="color:#7a8090;margin-bottom:20px">Effettua nuovamente l'accesso.</p>
         <a href="index.html" style="color:#60a5fa">← Torna al login</a>
       </div>`;
     return;
@@ -275,14 +277,14 @@ function renderDashboard() {
       <div class="next-title">📅 Prossima analisi prevista</div>
       <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
         <div>
-          <div style="font-size:12px;color:#4a6080;">Data prevista</div>
+          <div style="font-size:12px;color:#7a8090;">Data prevista</div>
           <div style="font-size:22px;font-weight:700;color:#60a5fa">${pa.data_calcolata || '—'}</div>
         </div>
         <div>
-          <div style="font-size:12px;color:#4a6080;">Giorni mancanti</div>
+          <div style="font-size:12px;color:#7a8090;">Giorni mancanti</div>
           <div class="countdown ${countClass}">${typeof giorni==='number'?(giorni<0?'SCADUTA':giorni+' gg'):giorni}</div>
         </div>
-        ${pa.nota_promemoria?`<div style="flex:1;min-width:200px;background:#0f172a;border-radius:8px;padding:12px 14px;font-size:13px;color:#94a3b8;border-left:3px solid #3b82f6">📝 ${pa.nota_promemoria}</div>`:''}
+        ${pa.nota_promemoria?`<div style="flex:1;min-width:200px;background:#e8ebf0;border-radius:8px;padding:12px 14px;font-size:13px;color:#5a6070;border-left:3px solid #b01c2e">📝 ${pa.nota_promemoria}</div>`:''}
       </div>
     </div>`;
   }
@@ -314,7 +316,7 @@ function renderDashboard() {
       </div>
       <div class="stats-row">
         <div class="stat-box"><div class="stat-lbl">Ultimo valore</div><div class="stat-val" style="color:${st==='err'?'#f87171':st==='warn'?'#fbbf24':'#e2e8f0'}">${last.toFixed(4)}%</div></div>
-        <div class="stat-box"><div class="stat-lbl">Media storica</div><div class="stat-val" style="color:#94a3b8">${avg.toFixed(4)}%</div></div>
+        <div class="stat-box"><div class="stat-lbl">Media storica</div><div class="stat-val" style="color:#5a6070">${avg.toFixed(4)}%</div></div>
         <div class="stat-box"><div class="stat-lbl">CV% variabilità</div><div class="stat-val" style="color:${cvColor(c)}">${c.toFixed(1)}% ${c<=10?'🟢':c<=30?'🟡':'🔴'}</div></div>
         <div class="stat-box"><div class="stat-lbl">Δ ultime 3</div><div class="stat-val" style="color:${Math.abs(dl)>avg*0.05?'#fbbf24':'#94a3b8'}">${dl>=0?'+':''}${dl.toFixed(4)}%</div></div>
       </div>
@@ -346,7 +348,7 @@ function buildSVG(vals, dates, color, specMax, specMin, comp) {
   svg+=`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>`;
   vals.forEach((v,i)=>{
     const out=(specMax&&v>specMax)||(specMin&&v<specMin);
-    svg+=`<circle cx="${xS(i)}" cy="${yS(v)}" r="4.5" fill="${out?'#ef4444':color}" stroke="#0a0f1a" stroke-width="1.5"/>`;
+    svg+=`<circle cx="${xS(i)}" cy="${yS(v)}" r="4.5" fill="${out?'#ef4444':color}" stroke="#f0f2f5" stroke-width="1.5"/>`;
     svg+=`<text x="${xS(i)}" y="${yS(v)-8}" font-size="8" fill="${out?'#f87171':'#4a6080'}" text-anchor="middle">${v.toFixed(4)}</text>`;
   });
   svg+=`<text x="${xS(0)}" y="${H-1}" font-size="9" fill="#4a6080">${dates[0]}</text>`;
@@ -387,7 +389,7 @@ function renderMercati() {
     <div class="panel" style="margin-bottom:20px">
       <div class="panel-hdr"><span class="panel-title">📊 Grafico e prezzo in tempo reale</span></div>
       <div class="panel-body">
-        <p style="color:#94a3b8;font-size:14px;margin-bottom:20px">
+        <p style="color:#5a6070;font-size:14px;margin-bottom:20px">
           Clicca su uno dei link qui sotto per visualizzare il prezzo aggiornato e il grafico storico dello stagno LME.
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:14px">
@@ -403,7 +405,7 @@ function renderMercati() {
       </div>
     </div>
 
-    <div style="font-size:11px;color:#4a6080;text-align:center;padding-bottom:10px">
+    <div style="font-size:11px;color:#7a8090;text-align:center;padding-bottom:10px">
       I prezzi sono espressi in USD/tonnellata · Solo a scopo informativo
     </div>`;
 }
@@ -447,7 +449,7 @@ function renderAcquisti() {
   <thead><tr><th>Data</th><th>Prodotto</th><th>Quantità (kg)</th></tr></thead><tbody>`;
 
   if (acquisti.length === 0) {
-    h += `<tr><td colspan="3" style="text-align:center;color:#4a6080;padding:30px">Nessun acquisto registrato</td></tr>`;
+    h += `<tr><td colspan="3" style="text-align:center;color:#7a8090;padding:30px">Nessun acquisto registrato</td></tr>`;
   } else {
     acquisti.forEach(a => {
       h += `<tr>
